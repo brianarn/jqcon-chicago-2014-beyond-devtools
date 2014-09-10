@@ -15,15 +15,19 @@
 	// also because slidechanged fires after state events
 	// soemthing something race conditions
 	function setupNextClear () {
+		console.log('setupNextClear before timeout');
 		setTimeout(function () {
+			console.log('setupNextClear in timeout');
 			Reveal.addEventListener('slidechanged', clearNext);
 		}, 10);
 	}
 
 	// I want these things to happen one time
 	function onceOnState (state, callback) {
+		console.log('onceOnState %s', state);
 		// We'll create an internal function to be used as our listener
 		function callMeMaybe () {
+			console.log('callMeMaybe %s', state);
 			Reveal.removeEventListener(state, callMeMaybe);
 			setupNextClear();
 			return callback.apply(this, arguments);
@@ -35,9 +39,11 @@
 
 	// lololol
 	onceOnState('outline', function () {
+		console.log('outlineeeee');
 		timer = setTimeout(Reveal.nextFragment, 1000);
 	});
 	onceOnState('babby-pees', function (e) {
+		console.log('babby-pees');
 		timer = setTimeout(Reveal.next, 2000);
 	});
 })();
